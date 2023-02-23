@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('question');
             $table->unsignedBigInteger('quiz_id');
-            $table->boolean('is_mandatory')->default(0);
+            $table->boolean('isMandatory')->default(0);
             $table->timestamps();
 
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');

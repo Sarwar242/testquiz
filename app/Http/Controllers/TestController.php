@@ -21,7 +21,7 @@ class TestController extends Controller
         $test =Test::all();
         return response()->json([
             "success"   => true,
-            'message'   => 'All of the tests!',
+            'errors'   => null,
             "data"      => $test
             ],200);
     }
@@ -32,39 +32,39 @@ class TestController extends Controller
     public function testCheck(TestRequest $request)
     {
         $validated = $request->validated();
-        $correct_answer=0;
-        $total_answer=count($validated["answers"]);
+        $correctAnswer=0;
+        $totalAnswer=count($validated["answers"]);
         foreach($validated["answers"] as $ans){
             $question = Question::find($ans["question_id"]);
             foreach($question->answers as $answer){
-                if($answer->is_correct && ($answer->answer === $ans["answer"])){
-                    $correct_answer+=1;
+                if($answer->isCorrect && ($answer->answer === $ans["answer"])){
+                    $correctAnswer+=1;
                 }
             }
         }
         try{
             DB::beginTransaction();
             $test = new Test;
-            $test->user_name = $validated["user_name"];
+            $test->userName = $validated["userName"];
             $test->rating = $validated["rating"];
-            $test->correct_answer = $correct_answer;
-            $test->total_answer = $total_answer;
+            $test->correctAnswer = $correctAnswer;
+            $test->totalAnswer = $totalAnswer;
             $test->quiz_id = $validated["quiz_id"];
             $test->save();
             DB::commit();
             return response()->json([
             "success"   => true,
-            'message'   => 'The Test is over;',
+            "errors"   => null,
             "data"      => $test
-            ],200);
+            ],201);
         }catch(Exception $e){
 
             \Log::error($e);
             DB::rollback();
             return response()->json([
                 "success" => false,
-                'message' => 'There has been an error creating the Quiz;',
-                "data"    => $e,
+                "errors"   =>  $e,
+                "data"    => null,
 
             ],400);
         }
@@ -95,13 +95,15 @@ class TestController extends Controller
         if(is_null($test)){
             return response()->json([
                 "success" => false,
-                'message' => 'The Test does not exists;',
+                "errors"   => array("Test not found!"),
+                "data"    => null,
             ],404);
         }
         $test->delete();
         return response()->json([
             "success"   => true,
-            'message'   => 'The Test has been deleted successfully;',
+            'errors'   => null,
+            "data"      => null,
             ],200);
     }
 }

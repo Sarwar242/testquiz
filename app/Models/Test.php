@@ -9,7 +9,7 @@ class Test extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_name', 'rating', 'correct_answer', 'total_answer', 'quiz_id'
+        'userName', 'rating', 'correctAnswer', 'totalAnswer', 'quiz_id'
     ];
 
     public function quiz(){

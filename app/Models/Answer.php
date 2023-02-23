@@ -9,11 +9,11 @@ class Answer extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'answer', 'question_id', 'is_correct'
+        'answer', 'question_id', 'isCorrect'
     ];
 
     protected $casts = [
-        'is_correct' => 'boolean',
+        'isCorrect' => 'boolean',
     ];
 
     public function question(){

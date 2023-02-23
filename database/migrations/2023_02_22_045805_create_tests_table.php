@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
-            $table->string('user_name');
+            $table->string('userName');
             $table->float('rating', 3,2)->nullable();
-            $table->integer('correct_answer')->nullable();
-            $table->integer('total_answer')->nullable();
+            $table->integer('correctAnswer')->nullable();
+            $table->integer('totalAnswer')->nullable();
             $table->unsignedBigInteger('quiz_id');
             $table->timestamps();
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');

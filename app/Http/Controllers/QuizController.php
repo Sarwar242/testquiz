@@ -20,7 +20,7 @@ class QuizController extends Controller
         $quiz =Quiz::with('questions.answers')->get();
         return response()->json([
             "success"   => true,
-            'message'   => 'All of the Quizzes!',
+            'errors'   => null,
             "data"      => $quiz
             ],200);
     }
@@ -38,7 +38,7 @@ class QuizController extends Controller
             $quiz = new Quiz;
             $quiz->title=$validated["title"];
             $quiz->description=$validated["description"];
-            $quiz->is_published=$validated["is_published"];
+            $quiz->isPublished=$validated["isPublished"];
             $quiz->save();
 
             // Creating questions under the created quiz
@@ -46,7 +46,7 @@ class QuizController extends Controller
 
                 $question3 = new Question;
                 $question3->question = $question["question"];
-                $question3->is_mandatory=$question["is_mandatory"];
+                $question3->isMandatory=$question["isMandatory"];
                 $question3->quiz_id=$quiz->id;
                 $question3->save();
 
@@ -56,7 +56,7 @@ class QuizController extends Controller
                     \Log::alert($answer);
                     $answer2 = new Answer;
                     $answer2->answer=$answer["answer"];
-                    $answer2->is_correct=$answer["is_correct"];
+                    $answer2->isCorrect=$answer["isCorrect"];
                     $answer2->question_id=$question3->id;
                     $answer2->save();
 
@@ -66,7 +66,7 @@ class QuizController extends Controller
             $quiz2=Quiz::with('questions.answers')->find($quiz->id);
             return response()->json([
             "success"   => true,
-            'message'   => 'The Quiz has been created successfully;',
+            'errors'   => null,
             "data"      => $quiz2
             ],201);
         }catch(Exception $e){
@@ -75,8 +75,8 @@ class QuizController extends Controller
             DB::rollback();
             return response()->json([
                 "success" => false,
-                'message' => 'There has been an error creating the Quiz;',
-                "data"    => $e,
+                'errors' => $e,
+                "data"    => null,
 
             ],400);
         }
@@ -92,12 +92,13 @@ class QuizController extends Controller
         if(is_null($quiz)){
             return response()->json([
                 "success" => false,
-                'message' => 'The Quiz does not exists;',
+                'errors'  => array("The Quiz does not exists;"),
+                "data"    => null,
             ],404);
         }
         return response()->json([
         "success"   => true,
-        'message'   => 'The Quiz details;',
+        'errors'   => null,
         "data"      => $quiz
         ],200);
     }
@@ -119,13 +120,16 @@ class QuizController extends Controller
         if(is_null($quiz)){
             return response()->json([
                 "success" => false,
-                'message' => 'The Quiz does not exists;',
-            ],404);
+                'errors'  => array("The Quiz does not exists;"),
+                "data"    => null,
+
+            ],400);
         }
         $quiz->delete();
         return response()->json([
-            "success"   => true,
-            'message'   => 'The Quiz has been deleted successfully;',
+            "success"  => true,
+            'errors'   => null,
+            "data"     => null
             ],200);
     }
 }

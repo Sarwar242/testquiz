@@ -24,7 +24,7 @@ class TestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_name' => 'required|string',
+            'userName' => 'required|string',
             'rating' => 'nullable|numeric',
             'quiz_id' => 'required|numeric',
             'answers.*.question_id' => 'required|numeric',
@@ -36,8 +36,8 @@ class TestRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'success'   => false,
-            'message'   => 'Validation errors',
-            'data'      => $validator->errors()
-        ]));
+            'errors'   => $validator->errors(),
+            'data'      => null
+        ],400));
     }
 }

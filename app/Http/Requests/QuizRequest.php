@@ -26,11 +26,11 @@ class QuizRequest extends FormRequest
         return [
             'title' => 'required|string',
             'description' => 'nullable|string|max:350',
-            'is_published' => 'nullable|boolean',
+            'isPublished' => 'nullable|boolean',
             'questions.*.question' => 'required|string',
-            'questions.*.is_mandatory' => 'nullable|boolean',
+            'questions.*.isMandatory' => 'nullable|boolean',
             'questions.*.answers.*.answer' => 'required|string',
-            'questions.*.answers.*.is_correct' => 'nullable|boolean',
+            'questions.*.answers.*.isCorrect' => 'nullable|boolean',
         ];
     }
 
@@ -38,8 +38,8 @@ class QuizRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'success'   => false,
-            'message'   => 'Validation errors',
-            'data'      => $validator->errors()
-        ]));
+            'errors'   => $validator->errors(),
+            'data'      => null
+        ],400));
     }
 }

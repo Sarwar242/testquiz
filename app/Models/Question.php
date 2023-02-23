@@ -9,11 +9,11 @@ class Question extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'question','quiz_id','is_mandatory'
+        'question','quiz_id','isMandatory'
     ];
 
     protected $casts = [
-        'is_mandatory' => 'boolean',
+        'isMandatory' => 'boolean',
     ];
 
     public function quiz(){
